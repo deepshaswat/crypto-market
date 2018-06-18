@@ -1,0 +1,77 @@
+/* Role */
+
+create table role (roleid integer not null auto_increment ,
+role varchar(25) not null,
+primary key (roleid)
+) auto_increment=1; 
+
+/* User */
+
+create table user (uid integer not null auto_increment ,
+username varchar(25) not null,
+fname varchar(25) not null,
+lname varchar(25) not null,
+email varchar(100),
+role_id integer not null references role(roleid) on delete cascade,
+password varchar(32) not null,
+unique(username),
+primary key(uid)
+) auto_increment=1; 
+
+/* Exchange Name */
+
+create table exchanges (eid integer not null auto_increment,
+ename varchar(100) not null,
+primary key(eid)
+) auto_increment=1;
+
+/* Crypto Name */
+
+create table currency (cid integer not null auto_increment,
+cname varchar(100) not null,
+primary key(cid)
+) auto_increment=1;
+
+/* Transaction History */
+
+create table transaction (tid integer not null auto_increment,
+type varchar(100) not null,
+e_id integer references exchanges(eid) on delete cascade,
+c_id integer references currency(cid) on delete cascade,
+tdate timestamp,
+price DECIMAL(10, 2),
+quantity DECIMAL(8, 8), 
+transaction_rate DECIMAL(3, 2),
+transaction_charges DECIMAL(8, 2),
+total_price DECIMAL(12, 2),
+primary key(tid)
+) auto_increment=1;
+
+/* Average Price and Quantity */
+
+create table price_quantity (pqid integer not null auto_increment,
+c_id integer references currency(cid) on delete cascade,
+avg_price DECIMAL(10, 2),
+quantity DECIMAL(8, 8), 
+primary key(pqid)
+) auto_increment=1;
+
+/* Money Balance Sheet */
+
+create table money_transfer (mtid integer not null auto_increment,
+type varchar(100) not null,
+amount DECIMAL(10, 2),
+transaction_rate DECIMAL(3, 2),
+transaction_charges DECIMAL(8, 2),
+primary key(mtid)
+) auto_increment=1;
+
+/* Currency Transfer History */
+
+create table currency_transfer (ctid integer not null auto_increment,
+e1_id integer references exchanges(eid) on delete cascade,
+e2_id integer references exchanges(eid) on delete cascade,
+c_id integer references currency(cid) on delete cascade,
+quantity DECIMAL(8, 8), 
+primary key(ctid)
+) auto_increment=1;
